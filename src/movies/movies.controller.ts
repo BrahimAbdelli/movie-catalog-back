@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   Put,
@@ -53,5 +54,12 @@ export class MoviesController {
       movieData.image = await uploadFile(image);
     }
     return await this.movieService.update(toUpdate, movieData);
+  }
+  @Get('/:id')
+  async findMe(
+    @Param(new ValidateObjectIdPipe('Movie')) params,
+  ): Promise<MovieEntity> {
+    // throws error 404 if not found
+    return await findByField(this.movieRepository, { _id: params.id }, true);
   }
 }
