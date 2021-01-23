@@ -37,4 +37,16 @@ export class MoviesService {
     }
     return await this.movieRepository.delete({ _id });
   }
+  async search(keyword): Promise<MovieEntity[]> {
+    const reg = new RegExp(keyword, 'i');
+    return await this.movieRepository.find({
+      take: 10,
+      where: {
+        title: reg,
+      },
+      order: {
+        title: 'ASC',
+      },
+    });
+  }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -68,5 +69,9 @@ export class MoviesController {
   async delete(@Param(new ValidateObjectIdPipe('Movie')) params) {
     // throws error 404 if not found
     return await this.movieService.delete(new ObjectID(params.id));
+  }
+  @Get()
+  async search(@Query() keyword): Promise<MovieEntity[]> {
+    return await this.movieService.search(keyword.keyword);
   }
 }
