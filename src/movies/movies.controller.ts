@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -19,6 +20,7 @@ import { uploadFile } from './shared/file-upload.utils';
 import { validateImages } from './shared/filters.utils';
 import { findByField } from './shared/findByField.utils';
 import { ValidateObjectIdPipe } from './shared/pipes/validateObjectId.pipe';
+import { ObjectID } from 'mongodb';
 
 @Controller('movies')
 export class MoviesController {
@@ -61,5 +63,10 @@ export class MoviesController {
   ): Promise<MovieEntity> {
     // throws error 404 if not found
     return await findByField(this.movieRepository, { _id: params.id }, true);
+  }
+  @Delete('/:id')
+  async delete(@Param(new ValidateObjectIdPipe('Movie')) params) {
+    // throws error 404 if not found
+    return await this.movieService.delete(new ObjectID(params.id));
   }
 }
